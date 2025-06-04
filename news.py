@@ -2,7 +2,7 @@ import requests
 import time
 from pprint import pprint
 import imaplib
-import emailsss
+
 
 
 
@@ -39,7 +39,7 @@ class NewsFeed:
                      "language=pt&"
                      "to=2025-05-29")
 
-    def __init__(self, interest, from_date, to_date, language):
+    def __init__(self, interest, from_date, to_date, language='en'):
         self.email_body = ""
         self.interest = f"q={interest}&"
         self.from_date = f"from={from_date}&"
@@ -62,6 +62,6 @@ class NewsFeed:
         body = self.prepare_body(content)
         return body
 
-
-news = NewsFeed("coimbra","2025-05-28","2025-05-30","pt")
-print(news.get())
+if __name__ == "__main__":
+    news = NewsFeed("coimbra","2025-05-28","2025-05-30","pt")
+    print(news.get())
