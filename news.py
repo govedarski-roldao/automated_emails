@@ -4,8 +4,6 @@ from pprint import pprint
 import imaplib
 
 
-
-
 class ExcelFile:
     def __init__(self, filepath):
         self.filepath = filepath
@@ -46,22 +44,26 @@ class NewsFeed:
         self.to_date = f"to={to_date}"
         self.language = f"language={language}&"
 
-    def prepare_body(self, dictionary_of_news):
+    def _prepare_body(self, dictionary_of_news):
         for line in dictionary_of_news:
             if line["title"] and line["url"]:
                 self.email_body += line["title"] + "\n" + line["url"] + "\n\n"
         return self.email_body
 
-    def get(self):
-        url = self.URL_BASE + self.interest + self.from_date + self.language + self.to_date + self.API_KEY
+    def _get_article(self, url):
         response = requests.get(url)
         if response.status_code != 200:
             print(f"Erro na requisição: {response.status_code} - {response.text}")
-            return ""
         content = response.json()["articles"]
-        body = self.prepare_body(content)
+        return content
+
+    def get(self):
+        url = self.URL_BASE + self.interest + self.from_date + self.language + self.to_date + self.API_KEY
+        content = self._get_article(url)
+        body = self._prepare_body(content)
         return body
 
+
 if __name__ == "__main__":
-    news = NewsFeed("coimbra","2025-05-28","2025-05-30","pt")
+    news = NewsFeed("coimbra", "2025-05-28", "2025-05-30", "pt")
     print(news.get())
